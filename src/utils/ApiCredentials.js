@@ -1,0 +1,5 @@
+const API_CREDENTIALS = {
+    key : "2aa21a17e55b34ca850468bb0efc1638",
+    token : "ATTAe88be32116468072701d58bab4dc2650b1f55d430d0fbc449c0115b8871cf65004360D9C"
+  }
+  export default API_CREDENTIALS;
