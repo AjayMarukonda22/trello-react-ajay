@@ -2,15 +2,19 @@ import React from "react";
 import { Card, CardContent, Typography, CardActionArea, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-export default function ActionAreaCard({ name, id, isStarred }) {
+
+export default function Board({ board }) {
 
   const navigate = useNavigate();
 
   const handleClick = () => {
-      navigate(`/boards/${id}`)
+      navigate(`/boards/${board.id}`)
   }
   return (
-    <Card sx={{ width: 250, height: 200, mt: 2, mb: 2 }} onClick = {handleClick}>
+    <Card sx={{ width: 250, height: 200, mt: 2, mb: 2, backgroundColor: board.prefs.backgroundColor,
+                backgroundImage: `url(${board.prefs.backgroundImage})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",}} onClick = {handleClick}>
       <CardActionArea sx={{ height: "100%" }}>
         <CardContent sx={{ height: "100%" }}>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -20,9 +24,9 @@ export default function ActionAreaCard({ name, id, isStarred }) {
               component="div"
               fontWeight="bold"
             >
-              {name}
+              {board.name}
             </Typography>
-           {isStarred &&  <Typography>⭐</Typography>}
+           {board.starred &&  <Typography>⭐</Typography>}
           </Box>
         </CardContent>
       </CardActionArea>

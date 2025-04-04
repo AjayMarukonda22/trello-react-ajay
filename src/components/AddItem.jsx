@@ -3,14 +3,14 @@ import { Card, TextField, Button, IconButton, Box } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
 
-export default function AddCard({ handleCardSubmit }) {
+export default function AddItem({ name, addNewItem }) {
   const [isEditing, setIsEditing] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const cardRef = useRef(null);
 
   const handleSubmit = () => {
     if (inputValue.trim()) {
-      handleCardSubmit(inputValue);
+      addNewItem(inputValue);
       setInputValue("");
     }
     setIsEditing(false);
@@ -20,7 +20,7 @@ export default function AddCard({ handleCardSubmit }) {
     <Card
       ref={cardRef}
       sx={{
-        width: 280,
+        width: 250,
         padding: isEditing ? 1 : 0,
         backgroundColor: isEditing ? "black" : "#f0f0f0",
         borderRadius: "12px",
@@ -46,7 +46,7 @@ export default function AddCard({ handleCardSubmit }) {
             fullWidth
             autoFocus
             variant="outlined"
-            placeholder="Enter card title..."
+            placeholder= {`Enter ${name} title...`}
             onBlur={(e) => {
               if (!cardRef.current?.contains(e.relatedTarget)) {
                 setIsEditing(false);
@@ -56,7 +56,7 @@ export default function AddCard({ handleCardSubmit }) {
           />
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <Button type="submit" variant="contained" color="primary">
-              Add Card
+              Add {name}
             </Button>
             <IconButton onClick={() => setIsEditing(false)} color="inherit">
               <CloseIcon />
@@ -76,7 +76,7 @@ export default function AddCard({ handleCardSubmit }) {
             textTransform: "none",
           }}
         >
-          Add a card
+          Add a {name}
         </Button>
       )}
     </Card>

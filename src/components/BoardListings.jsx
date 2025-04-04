@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import Card from './Board';
 import { Grid,} from '@mui/material';
 import axios from 'axios';
-import API_CREDENTIALS from '../utils/ApiCredentials';
-import AddBoard from './AddBoard';
+import Board from './Board'
+import AddItem from './AddItem';
 
 
 const Boards = () => {
@@ -37,7 +36,7 @@ const Boards = () => {
 
    const allBoards = boards.map((board) => {
     return <Grid key={board.id} item xs={12} sm={6}>
-                <Card name = {board.name} id = {board.id} isStarred = {board.starred}/>
+                <Board board = {board}/>
             </Grid>
    })
 
@@ -65,7 +64,7 @@ const Boards = () => {
       <Grid container spacing={2}>
           {allBoards}
           <Grid item>
-          <AddBoard handleBoardSubmit={handleBoardSubmit} />
+          <AddItem name = {'Board'} addNewItem={handleBoardSubmit} />
         </Grid>
       </Grid>
     </div>
