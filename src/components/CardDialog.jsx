@@ -77,6 +77,83 @@ const CardDialog = ({ card, open, onClose }) => {
       console.error(`Error while deleting checklist`, err);
     }
   };
+
+  const addNewCheckItem = async (checkListId, name) => {
+      try {
+          const response = await axios.post(`https://api.trello.com/1/checklists/${checkListId}/checkItems`, null, 
+            {
+              params : {
+                 name,
+                 key : import.meta.env.VITE_API_KEY,
+                 token : import.meta.env.VITE_API_TOKEN,
+              }
+       });
+
+       console.log('new checkItem:',response.data);
+       const newItem = response.data;
+        setCheckLists(prev => 
+            prev.map(cl => 
+              cl.id === checkListId ?
+              {
+                ...cl,
+                checkItems : [...(cl.checkItems || []), newItem]
+              } : cl
+            )
+        )
+      }
+      catch(err) {
+        console.log('Error while creating new CheckItem', err);
+      }
+  }
+
+  const handleDeleteCheckItem = async (checkListId, checkItemId) => {
+       try {
+          await axios.delete(`https://api.trello.com/1/checklists/${checkListId}/checkItems/${checkItemId}`, 
+            {params: {
+              key: import.meta.env.VITE_API_KEY,
+              token: import.meta.env.VITE_API_TOKEN,
+            }}
+          );
+
+          setCheckLists(prev => 
+            prev.map(cl => 
+              cl.id === checkListId ?
+              {
+                ...cl,
+              checkItems : cl.checkItems.filter((item) => item.id !== checkItemId)} 
+                : cl
+            )
+          )
+       }
+       catch(err) {
+        console.log('Error while deleting checkItem', err);
+       }
+  }
+
+  const handleUpdateCheckItem = async (checkListId, checkItemId, itemState) => {
+      try {
+         const response = await axios.put(`https://api.trello.com/1/cards/${card.id}/checkItem/${checkItemId}`, null,
+          {params: {
+            key: import.meta.env.VITE_API_KEY,
+            token: import.meta.env.VITE_API_TOKEN,
+            state : itemState,
+          }}
+         );
+         console.log(`Updated checkItem:`, response.data);
+         setCheckLists(prev => 
+          prev.map(cl => 
+            cl.id === checkListId ?
+            {
+             ...cl,
+             checkItems : cl.checkItems.map(item => item.id === checkItemId ? {...item, state : itemState} : item)
+            } : cl
+          )
+         )
+      }
+      catch(err) {
+        console.log('Error while updating checkItem', err);
+      }
+  }
   
 
   return (
@@ -110,7 +187,7 @@ const CardDialog = ({ card, open, onClose }) => {
       <DialogContent sx={{ backgroundColor: "lavender" }}>
         <Box sx={{display: 'flex' , justifyContent : 'space-between', alignItems : 'center'}}>
         <Typography variant="h5">Checklists</Typography>
-        <AddItem name = {'Check list'} addnewItem = {addNewCheckList}/>
+        <AddItem name = {'Check list'} addNewItem = {addNewCheckList}/>
         </Box>
         {checkLists?.map((checklist) => (
           <Box
@@ -137,7 +214,7 @@ const CardDialog = ({ card, open, onClose }) => {
                   }}}/>
             </IconButton>
             </Box>
-            <CheckItems checkItems={checklist.checkItems}/>
+            <CheckItems checkItems={checklist.checkItems} checkListId = {checklist.id} addNewCheckItem = {addNewCheckItem} handleUpdateCheckItem = {handleUpdateCheckItem} handleDeleteCheckItem={handleDeleteCheckItem}/>
           </Box>
         ))}
 
