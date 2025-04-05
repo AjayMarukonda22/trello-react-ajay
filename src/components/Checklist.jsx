@@ -43,7 +43,7 @@ const CheckItems = ({
 
       <Grid container direction="column" spacing={2}>
         {checkItems.map((checkItem) => (
-          <Grid item key={checkItem.id}>
+          <Grid key={checkItem.id}>
             <Box
               sx={{
                 p: 1,

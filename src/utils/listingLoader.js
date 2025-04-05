@@ -12,8 +12,6 @@ const listingLoader = async (boardId) => {
       },
     };
 
-    console.log( "boardId" , boardId , typeof boardId )
-
     // Make all 3 API calls concurrently
     const [boardRes, listsRes, cardsRes] = await Promise.all([
       axios.get(`https://api.trello.com/1/boards/${boardId}`, config),

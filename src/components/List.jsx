@@ -1,15 +1,13 @@
-import React, { useState } from "react";
+import React,{useState} from "react";
 import {
   Card,
   CardHeader,
   CardContent,
   IconButton,
-  Menu,
-  MenuItem,
   Typography,
   Box,
 } from "@mui/material";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
+import ArchiveIcon from "@mui/icons-material/Archive";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CardDialog from "./CardDialog";
 import AddItem from "./AddItem";
@@ -22,21 +20,8 @@ const List = ({
   handleCardSubmit,
   handleDeleteCard,
 }) => {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [selectedCard, setSelectedCard] = useState(null);
+  const [selectedCard, setSelectedCard] = React.useState(null);
 
-  const handleMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleArchiveClick = () => {
-    handleMenuClose();
-    handleArchiveList(id);
-  };
 
   const addNewCard = (cardTitle) => {
     handleCardSubmit(id, cardTitle);
@@ -69,40 +54,13 @@ const List = ({
           title={name}
           sx={{ color: "#ffffff" }}
           action={
-            <>
-              <IconButton
-                aria-label="settings"
-                onClick={handleMenuOpen}
-                sx={{ color: "#ffffff" }}
-              >
-                <MoreVertIcon />
-              </IconButton>
-              <Menu
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
-                onClose={handleMenuClose}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "left",
-                }}
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "left",
-                }}
-              >
-                <MenuItem
-                  onClick={handleArchiveClick}
-                  sx={{
-                    "&:hover": {
-                      backgroundColor: "lightBlue",
-                      cursor: "pointer",
-                    },
-                  }}
-                >
-                  Archive list
-                </MenuItem>
-              </Menu>
-            </>
+            <IconButton
+              aria-label="archive"
+              onClick={() => handleArchiveList(id)}
+              sx={{ color: "#ffffff" }}
+            >
+              <ArchiveIcon />
+            </IconButton>
           }
         />
         {cards && (
@@ -153,7 +111,7 @@ const List = ({
 
       {selectedCard && (
         <CardDialog
-          open={selectedCard ? true : false}
+          open={Boolean(selectedCard)}
           onClose={handleCloseDialog}
           card={selectedCard}
         />
